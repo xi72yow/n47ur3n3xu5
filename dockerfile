@@ -65,6 +65,12 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/services.sh ./services.sh
 COPY --from=deps --chown=nextjs:nodejs /pb/pocketbase ./pb/pocketbase
 
+# rw for nextjs user
+RUN  mkdir ./pb/pb_data && chown -R nextjs:nodejs ./pb/pb_data
+
+# rw for nextjs user
+RUN  mkdir ./pb/pb_migrations && chown -R nextjs:nodejs ./pb/pb_migrations
+
 USER nextjs
 
 EXPOSE 3000
