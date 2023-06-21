@@ -1,6 +1,10 @@
 import PocketBase from "pocketbase";
 
-export const pb = new PocketBase("http://127.0.0.1:8090");
+const isProd = process.env.NODE_ENV === "production";
+
+export const pb = new PocketBase(
+  isProd ? "http://0.0.0.0:8080" : "http://127.0.0.1:8090"
+);
 
 export default function loginPocketBase({
   username,

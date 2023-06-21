@@ -1,0 +1,14 @@
+version: '3.2'
+services:
+  app:
+    image: 'xi72yow/n47ur3n3xu5:latest'
+    container_name: nexus
+    restart: unless-stopped
+    volumes:
+      - ./data:/pb
+    networks:
+      - nginx-proxy_default
+networks:
+  nginx-proxy_default:
+    external:
+      name: nginx-proxy_default
