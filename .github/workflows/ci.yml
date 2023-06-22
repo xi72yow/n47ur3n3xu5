@@ -27,3 +27,12 @@ jobs:
       - name: Inspect
         run: |
           docker buildx imagetools inspect "ghcr.io/${{ github.repository }}:latest"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: install curl
+        run: sudo apt-get install curl
+      - name: Deploy
+        run: |
+          curl -k "${{ secrets.DEPLOY_URL }}" --header "${{ secrets.DEPLOY_KEY }}"

@@ -173,7 +173,7 @@ export default function HeaderMenu() {
     <Header height={56} mb={120}>
       <Container>
         <div className={classes.inner}>
-          Nature Nexus
+          Nature Nexus Redeploy
           <Group spacing={5} className={classes.links}>
             {items}
           </Group>

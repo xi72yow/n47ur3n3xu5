@@ -2,9 +2,7 @@ import PocketBase from "pocketbase";
 
 const isProd = process.env.NODE_ENV === "production";
 
-export const pb = new PocketBase(
-  isProd ? "https://pb.cloud.xi72yow.de" : "http://127.0.0.1:8090"
-);
+export const pb = new PocketBase("https://pb.cloud.xi72yow.de");
 
 export default function loginPocketBase({
   username,
