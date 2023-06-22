@@ -1,4 +1,5 @@
-import loginPocketBase from "@/helpers/pocketbase";
+import React from "react";
+import loginPocketBase, { loginViaCookie, pb } from "@/helpers/pocketbase";
 import {
   Anchor,
   Button,
@@ -9,13 +10,27 @@ import {
   Stack,
   Text,
   TextInput,
-  Center,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
-import { useRouter } from "next/navigation";
+import { AppContext } from "../contexts/appContext";
+
 export function AuthenticationForm(props: PaperProps) {
-  const router = useRouter();
+  const { setAuthData } = React.useContext(AppContext);
+
+  React.useEffect(() => {
+    loginViaCookie().then((auth: any) => {
+      if (auth) {
+        setAuthData(auth);
+        notifications.show({
+          title: `Willkommen zurück, ${auth.record.username}!`,
+          color: "green",
+          message: "Du wurdest automatisch eingeloggt.",
+        });
+      }
+    });
+  }, []);
+
   const form = useForm({
     initialValues: {
       username: "",
@@ -43,7 +58,7 @@ export function AuthenticationForm(props: PaperProps) {
           })
             .then((auth) => {
               if (auth) {
-                router.push("/dashboard");
+                setAuthData(auth);
               }
             })
             .catch((err) => {

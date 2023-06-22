@@ -1,7 +1,7 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "NatureNexus | Login",
+  title: "NatureNexus",
   description: "A Nature Database",
 };
 

@@ -1,14 +1,17 @@
 "use client";
 
-import { AuthenticationForm } from "@/components/forms/loginForm";
+import { AppContextProvider } from "@/components/contexts/appContext";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import App from "./app";
 
 export default function Home() {
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS>
-      <Notifications position="top-right" />
-      <AuthenticationForm></AuthenticationForm>
+      <AppContextProvider>
+        <Notifications position="top-center" />
+        <App></App>
+      </AppContextProvider>
     </MantineProvider>
   );
 }
