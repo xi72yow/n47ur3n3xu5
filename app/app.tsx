@@ -4,6 +4,7 @@ import { AppContext } from "@/components/contexts/appContext";
 import { Header } from "@/components/header";
 import { IconHome2 } from "@tabler/icons-react";
 import { pb, pocketbaseURL } from "@/helpers/pocketbase";
+import Menue from "@/components/menu";
 
 type Props = {};
 
@@ -30,14 +31,15 @@ export default function App({}: Props) {
     );
 
   return (
-    <Header
-      activeTab={activeTab}
-      setActiveTab={setActiveTab}
-      user={{
-        name: authData.record.username,
-        image: `${pocketbaseURL}/api/files/${authData.record.collectionId}/${authData.record.id}/${authData.record.avatar}`,
-      }}
-      tabs={tabs}
-    ></Header>
+    <>
+      <Header
+        user={{
+          name: authData.record.username,
+          image: `${pocketbaseURL}/api/files/${authData.record.collectionId}/${authData.record.id}/${authData.record.avatar}`,
+        }}
+        tabs={tabs}
+      ></Header>
+      <Menue activeTab={activeTab} setActiveTab={setActiveTab}></Menue>
+    </>
   );
 }

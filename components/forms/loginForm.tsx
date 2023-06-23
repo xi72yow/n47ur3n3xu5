@@ -1,18 +1,19 @@
-import React from "react";
-import loginPocketBase, { loginViaCookie, pb } from "@/helpers/pocketbase";
+import loginPocketBase, { loginViaCookie } from "@/helpers/pocketbase";
 import {
   Anchor,
   Button,
   Container,
   Group,
+  MediaQuery,
   PaperProps,
   PasswordInput,
   Stack,
   Text,
   TextInput,
 } from "@mantine/core";
-import { notifications } from "@mantine/notifications";
 import { useForm } from "@mantine/form";
+import { notifications } from "@mantine/notifications";
+import React from "react";
 import { AppContext } from "../contexts/appContext";
 
 export function AuthenticationForm(props: PaperProps) {
@@ -98,15 +99,23 @@ export function AuthenticationForm(props: PaperProps) {
         </Stack>
 
         <Group position="apart" mt="xl">
-          <Anchor
-            component="button"
-            type="button"
-            color="dimmed"
-            onClick={() => {}}
-            size="xs"
+          <MediaQuery
+            smallerThan="md"
+            styles={{
+              maxWidth: "200px",
+            }}
           >
-            Sie haben noch kein Konto? Kontaktieren Sie mich.
-          </Anchor>
+            <Anchor
+              component="button"
+              type="button"
+              color="dimmed"
+              onClick={() => {}}
+              size="xs"
+            >
+              Sie haben noch kein Konto? Kontaktieren Sie mich.
+            </Anchor>
+          </MediaQuery>
+
           <Button type="submit" radius="xl">
             Anmelden
           </Button>
