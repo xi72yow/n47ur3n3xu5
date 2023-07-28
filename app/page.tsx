@@ -3,7 +3,10 @@
 import { AppContextProvider } from "@/components/contexts/appContext";
 import { MantineProvider } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
+import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./app";
+
+const queryClient = new QueryClient();
 
 export default function Home() {
   return (
@@ -74,7 +77,9 @@ export default function Home() {
     >
       <AppContextProvider>
         <Notifications position="top-center" />
-        <App></App>
+        <QueryClientProvider client={queryClient}>
+          <App></App>
+        </QueryClientProvider>
       </AppContextProvider>
     </MantineProvider>
   );

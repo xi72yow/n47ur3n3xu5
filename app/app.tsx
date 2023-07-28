@@ -5,6 +5,8 @@ import { Header } from "@/components/header";
 import { IconHome2 } from "@tabler/icons-react";
 import { pb, pocketbaseURL } from "@/helpers/pocketbase";
 import Menue from "@/components/menu";
+import { SegmentedControl } from "@mantine/core";
+import CardList from "@/components/main";
 
 type Props = {};
 
@@ -32,13 +34,37 @@ export default function App({}: Props) {
 
   return (
     <>
-      <Header
-        user={{
-          name: authData.record.username,
-          image: `${pocketbaseURL}/api/files/${authData.record.collectionId}/${authData.record.id}/${authData.record.avatar}`,
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: 100,
         }}
-        tabs={tabs}
-      ></Header>
+      >
+        <Header
+          user={{
+            name: authData.record.username,
+            image: `${pocketbaseURL}/api/files/${authData.record.collectionId}/${authData.record.id}/${authData.record.avatar}`,
+          }}
+          tabs={tabs}
+        ></Header>
+        <SegmentedControl
+          fullWidth
+          size="lg"
+          color="primary"
+          style={{
+            backgroundColor: "#f5f5f5cc",
+          }}
+          data={[
+            { label: "Schafe", value: "SHEEPS" },
+            { label: "Bienen", value: "BEES" },
+            { label: "Hühner", value: "CHICKENS" },
+          ]}
+        />
+      </div>
+
+      <CardList></CardList>
+
       <Menue activeTab={activeTab} setActiveTab={setActiveTab}></Menue>
     </>
   );

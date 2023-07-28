@@ -4,6 +4,7 @@ import {
   Container,
   Group,
   Menu,
+  SegmentedControl,
   Stack,
   Text,
   UnstyledButton,
@@ -28,7 +29,6 @@ const useStyles = createStyles((theme) => ({
     borderBottom: `${rem(1)} solid ${
       theme.colorScheme === "dark" ? "transparent" : theme.colors.gray[2]
     }`,
-    marginBottom: rem(120),
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
