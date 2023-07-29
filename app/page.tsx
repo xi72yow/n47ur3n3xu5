@@ -2,9 +2,11 @@
 
 import { AppContextProvider } from "@/components/contexts/appContext";
 import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./app";
+import ConfirmationContextProvider from "@/components/hooks/confirm";
 
 const queryClient = new QueryClient();
 
@@ -76,10 +78,14 @@ export default function Home() {
       }}
     >
       <AppContextProvider>
-        <Notifications position="top-center" />
-        <QueryClientProvider client={queryClient}>
-          <App></App>
-        </QueryClientProvider>
+        <ConfirmationContextProvider>
+          <Notifications position="top-center" />
+          <QueryClientProvider client={queryClient}>
+            <ModalsProvider>
+              <App></App>
+            </ModalsProvider>
+          </QueryClientProvider>
+        </ConfirmationContextProvider>
       </AppContextProvider>
     </MantineProvider>
   );

@@ -48,7 +48,7 @@ export default function App({}: Props) {
           }}
           tabs={tabs}
         ></Header>
-        <SegmentedControl
+        {/* <SegmentedControl
           fullWidth
           size="lg"
           color="primary"
@@ -60,12 +60,12 @@ export default function App({}: Props) {
             { label: "Bienen", value: "BEES" },
             { label: "Hühner", value: "CHICKENS" },
           ]}
-        />
+        /> */}
       </div>
 
       <CardList></CardList>
 
-      <Menue activeTab={activeTab} setActiveTab={setActiveTab}></Menue>
+      {/*  <Menue activeTab={activeTab} setActiveTab={setActiveTab}></Menue> */}
     </>
   );
 }

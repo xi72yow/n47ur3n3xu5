@@ -1,22 +1,41 @@
+import { useConfirm } from "@/components/hooks/confirm";
+import dayjs from "dayjs";
 import { ActionIcon, Card, Group, Text } from "@mantine/core";
 import { IconEdit, IconTrash } from "@tabler/icons-react";
 import React, { LegacyRef } from "react";
 
-type Props = { data: any };
+type Props = { data: any; deleteLog: any };
 
-const SheepCard = React.forwardRef(({ data }: Props, ref) => {
+const SheepCard = React.forwardRef(({ data, deleteLog }: Props, ref) => {
+  const confirm = useConfirm();
   const todoContent = (
     <Card withBorder>
       <Group position="apart">
         <Text size={"lg"} weight={600}>
-          {data.logDate}
+          {dayjs(data.logDate).format("DD.MM.YYYY")}
         </Text>
         <Group>
           <ActionIcon variant="subtle" color="primary">
-            <IconEdit size="xl" />
+            <IconEdit size={25} />
           </ActionIcon>
-          <ActionIcon variant="subtle" color="primary">
-            <IconTrash size="xl" />
+          <ActionIcon
+            variant="subtle"
+            color="primary"
+            onClick={() => {
+              confirm
+                .showConfirmation(
+                  `Den Log vom ${dayjs(data.logDate).format(
+                    "DD.MM.YYYY"
+                  )} wirklich löschen?`,
+                  true
+                )
+                .then((confirmed) => {
+                  if (!confirmed) return;
+                  deleteLog(data.id);
+                });
+            }}
+          >
+            <IconTrash size={25} />
           </ActionIcon>
         </Group>
       </Group>
