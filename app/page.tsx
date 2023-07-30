@@ -7,6 +7,7 @@ import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "react-query";
 import App from "./app";
 import ConfirmationContextProvider from "@/components/hooks/confirm";
+import { DatesProvider } from "@mantine/dates";
 
 const queryClient = new QueryClient();
 
@@ -18,6 +19,18 @@ export default function Home() {
       theme={{
         primaryShade: 0,
         colors: {
+          red: [
+            "#c92a2a",
+            "#b52424",
+            "#a11f1f",
+            "#8d1a1a",
+            "#781515",
+            "#641010",
+            "#4f0b0b",
+            "#3b0606",
+            "#260101",
+          ],
+
           "Pink-lavender": [
             "#d1b1c8",
             "#bc9fb4",
@@ -78,14 +91,18 @@ export default function Home() {
       }}
     >
       <AppContextProvider>
-        <ConfirmationContextProvider>
-          <Notifications position="top-center" />
-          <QueryClientProvider client={queryClient}>
-            <ModalsProvider>
-              <App></App>
-            </ModalsProvider>
-          </QueryClientProvider>
-        </ConfirmationContextProvider>
+        <DatesProvider
+          settings={{ locale: "de", firstDayOfWeek: 0, weekendDays: [0] }}
+        >
+          <ConfirmationContextProvider>
+            <Notifications position="top-center" />
+            <QueryClientProvider client={queryClient}>
+              <ModalsProvider>
+                <App></App>
+              </ModalsProvider>
+            </QueryClientProvider>
+          </ConfirmationContextProvider>
+        </DatesProvider>
       </AppContextProvider>
     </MantineProvider>
   );

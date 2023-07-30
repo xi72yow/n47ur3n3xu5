@@ -3,20 +3,22 @@ import { useEffect } from "react";
 import { useInfiniteQuery, useMutation, useQueryClient } from "react-query";
 import { useInView } from "react-intersection-observer";
 import SheepCard from "./cards/sheepCard";
-import { Button, Group, SimpleGrid } from "@mantine/core";
+import { Button, Group, SimpleGrid, Text } from "@mantine/core";
 import { pb } from "@/helpers/pocketbase";
+import { modals } from "@mantine/modals";
+import SheepLogForm from "../forms/sheepLogForm";
+import { notifications } from "@mantine/notifications";
 
 type Props = {};
 
 export default function CardList({}: Props) {
   const { ref, inView } = useInView();
-  const FETCH_LIMIT = 3;
 
   const fetchData = async (page: any) => {
     const data = await pb
       .collection("sheep_log")
       //sort by date newest first
-      .getList(page, 3, { sort: "-logDate" });
+      .getList(page, 10, { sort: "-logDate" });
 
     return data;
   };
@@ -27,32 +29,10 @@ export default function CardList({}: Props) {
     useInfiniteQuery("sheep_log", ({ pageParam = 1 }) => fetchData(pageParam), {
       getNextPageParam: (lastPage, allPages) => {
         const nextPage =
-          lastPage.totalItems > allPages.length * FETCH_LIMIT
-            ? allPages.length + 1
-            : undefined;
+          lastPage.page < lastPage.totalPages ? allPages.length + 1 : false;
         return nextPage;
       },
     });
-
-  const deleteLog = useMutation(
-    async (id: string) => {
-      const data = await pb.collection("sheep_log").delete(id);
-      return data;
-    },
-    {
-      onSuccess: (data, variables) => {
-        queryClient.setQueryData("sheep_log", (oldData: any) => {
-          const newData = oldData.pages.map((page: any) => {
-            const newItems = page.items.filter(
-              (item: any) => item.id !== variables
-            );
-            return { ...page, items: newItems };
-          });
-          return { ...oldData, pages: newData };
-        });
-      },
-    }
-  );
 
   const addLog = useMutation(
     async (formData: any) => {
@@ -75,30 +55,6 @@ export default function CardList({}: Props) {
     }
   );
 
-  const updateLog = useMutation(
-    async (formData: any) => {
-      const { id, ...rest } = formData;
-      const data = await pb.collection("sheep_log").update(id, rest);
-      return data;
-    },
-    {
-      onSuccess: (data, variables) => {
-        queryClient.setQueryData("sheep_log", (oldData: any) => {
-          const newData = oldData.pages.map((page: any) => {
-            const newItems = page.items.map((item: any) => {
-              if (item.id === variables.id) {
-                return { ...item, ...variables };
-              }
-              return item;
-            });
-            return { ...page, items: newItems };
-          });
-          return { ...oldData, pages: newData };
-        });
-      },
-    }
-  );
-
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage();
@@ -108,24 +64,16 @@ export default function CardList({}: Props) {
   const content =
     isSuccess &&
     data.pages.map((page) =>
-      page.items.map((data: any) => {
-        if (data.id === page.items[page.items.length - 1].id) {
-          return (
-            <SheepCard
-              ref={ref}
-              key={data.id}
-              data={data}
-              deleteLog={deleteLog.mutateAsync}
-            />
-          );
+      page.items.map((pageData: any) => {
+        if (
+          pageData.id ===
+          data.pages[data.pages.length - 1].items[
+            data.pages[data.pages.length - 1].items.length - 1
+          ].id
+        ) {
+          return <SheepCard ref={ref} key={pageData.id} data={pageData} />;
         }
-        return (
-          <SheepCard
-            key={data.id}
-            data={data}
-            deleteLog={deleteLog.mutateAsync}
-          />
-        );
+        return <SheepCard key={pageData.id} data={pageData} />;
       })
     );
 
@@ -146,11 +94,34 @@ export default function CardList({}: Props) {
       </SimpleGrid>
       <Button
         style={{ position: "fixed", bottom: "40px", right: "40px" }}
-        size="xl"
+        size="lg"
         onClick={() => {
-          addLog.mutateAsync({
-            logDate: new Date(),
-            logText: "test",
+          modals.open({
+            title: (
+              <Text weight={600} size="lg">
+                Neuer Eintrag
+              </Text>
+            ),
+            closeButtonProps: {
+              "aria-label": "close modal",
+              color: "primary",
+              size: "xl",
+            },
+            children: (
+              <SheepLogForm
+                onSubmit={(values) => {
+                  addLog.mutateAsync(values).catch((error) => {
+                    notifications.show({
+                      title: "Fehler",
+                      message: error.message,
+                      color: "red",
+                      autoClose: 5000,
+                    });
+                  });
+                  modals.closeAll();
+                }}
+              />
+            ),
           });
         }}
       >

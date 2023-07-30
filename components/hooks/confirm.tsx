@@ -98,12 +98,12 @@ const ConfirmationContextProvider: React.FC<
             {content.message}
           </Text>
 
-          <Group align="end">
-            <Button size="xl" onClick={handleCancel}>
+          <Group position="right">
+            <Button size="lg" onClick={handleCancel}>
               Nein
             </Button>
             <Button
-              size="xl"
+              size="lg"
               color={content.dangerYes ? "Pink-lavender" : "blue"}
               onClick={handleOk}
             >
